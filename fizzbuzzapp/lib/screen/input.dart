@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:fizzbuzzapp/utils/global_method.dart';
+import 'package:provider/provider.dart';
+import 'package:fizzbuzzapp/provider/theme_provider.dart';
 
 class InputScreen extends StatefulWidget {
   const InputScreen({Key? key}) : super(key: key);
@@ -10,18 +13,39 @@ class InputScreen extends StatefulWidget {
 
 class _InputScreenState extends State<InputScreen> {
   int keyboard_num = 0;
+
   @override
   Widget build(BuildContext context) {
+    final themeChange = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
             elevation: 0,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Text('Get FizzBuzz'),
+            title: Text('Get FizzBuzz',
+                style: TextStyle(color: Theme.of(context).primaryColor)),
             actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.light_mode,
-                      color: Theme.of(context).primaryColor))
+              if (themeChange.darkTheme)
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        themeChange.darkTheme = !themeChange.darkTheme;
+                      });
+                    },
+                    icon: Icon(Icons.light_mode,
+                        color: Theme.of(context).primaryColor))
+              else
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      themeChange.darkTheme = !themeChange.darkTheme;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.dark_mode,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                )
             ]),
         body: GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -44,19 +68,23 @@ class _InputScreenState extends State<InputScreen> {
                     child: TextField(
                         // ignore_for_file: prefer_const_constructors
                         decoration: InputDecoration(
-                          labelText: 'Enter Your Number',
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            labelText: 'Enter Your Number',
+                            labelStyle: TextStyle(
                                 color: Theme.of(context).primaryColor),
-                          ),
-                        ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                            )),
                         keyboardType: TextInputType.number,
                         style: TextStyle(color: Theme.of(context).primaryColor),
                         onChanged: (text) {
                           if (double.tryParse(text) != null) {
                             setState(() => keyboard_num = int.parse(text));
                           } else {
-                            print('is empty');
                             setState(() => keyboard_num = 0);
                           }
                         }),
