@@ -18,6 +18,7 @@ class GlobalMethod {
       }
       ;
     } catch (err) {
+      print(err);
       return [];
     }
 

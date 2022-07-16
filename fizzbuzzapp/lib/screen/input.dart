@@ -66,6 +66,7 @@ class _InputScreenState extends State<InputScreen> {
                   SizedBox(
                     width: 300,
                     child: TextField(
+                        key: Key('inputField'),
                         // ignore_for_file: prefer_const_constructors
                         decoration: InputDecoration(
                             labelText: 'Enter Your Number',
